@@ -1,0 +1,71 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileExtractorWPF"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="FileExtractorWPF.MainWindow"
+        mc:Ignorable="d"
+        Title="Extractor de Ficheros para Portada Alta" Height="360.699" Width="372.826" ResizeMode="CanMinimize" Name="ventanaPrincipal">
+    <Canvas>
+        <Label Content="Ruta a carpeta de ejercicios:" Canvas.Left="23" Canvas.Top="30" FontWeight="Bold"/>
+        <Label Content="Ruta de salida:" Canvas.Left="23" Canvas.Top="85" FontWeight="Bold"/>
+        <Button Content="Iniciar extractor" Canvas.Left="235" Canvas.Top="205" Width="95" Height="32" Name="btnIniciar" Click="BtnIniciar_Click" ToolTip="Inicia el extractor con las condiciones establecidas en opciones de extracción. Si no se marca ni .exe, .dll o .cs solo creará las carpetas (vacias)."/>
+        <Button Content="1" Canvas.Left="288" Canvas.Top="56" Width="30" FontFamily="Wingdings" Height="25" FontSize="18" FontWeight="Bold" Name="btnRutaInicio" Click="btnRutaInicialClick" ToolTip="Abre el buscador de Windows para buscar una carpeta"/>
+        <Menu Width="685">
+            <MenuItem Header="Acerca de" />
+        </Menu>
+        <GroupBox Canvas.Left="23" Canvas.Top="158" Height="147" Width="188">
+            <GroupBox.Header>
+                <TextBlock>
+                    <Span FontWeight="Bold">Opciones de extracción</Span>
+                </TextBlock>
+            </GroupBox.Header>
+            <StackPanel>
+                <CheckBox Content="Incluir todos .exe" Margin="0,10,0,0" Name="cbxExe" ToolTip="Al estar marcada esta opción el extractor incluirá todos los archivos con extensión *.exe"/>
+                <CheckBox Content="Incluir todos .dll" Name="cbxDll" ToolTip="Al estar marcada esta opción el extractor incluirá todos los archivos con extensión *.dll"/>
+                <CheckBox Content="Incluir todos .cs" Name="cbxCs" ToolTip="Al estar marcada esta opción el extractor incluirá todos los archivos con extensión *.cs"/>
+                <CheckBox Content="Mostrar arbol carpetas. Da lag" Name="cbxExpand" Checked="CbxExpand_Checked" Unchecked="CbxExpand_Unchecked" ToolTip="Al estar marcada esta opción el extractor mostrará el arbol de carpetas de la ruta original (si existe). Puede dar error al no tener los permisos para leer archivos de sistema. En carpetas grandes tardará en leer toda la información anulando el hilo principal de ejecución de la aplicación, usar bajo tu responsabilida. BETA."/>
+                <CheckBox Content="Comprimir resultado (.zip)" Name="cbxComprimir" Checked="CbxComprimir_Checked" Unchecked="CbxComprimir_Unchecked" ToolTip="Al estar marcada esta opción el extractor creará un comprimido .zip con el mismo nombre y contenido que la carpeta de salida."/>
+                <CheckBox Content="Borrar carpeta tras comprimir" Name="cbxBorrar" IsEnabled="False" ToolTip="Al estar marcada esta opción el extractor borrará la carpeta de salida, quedando así solo el .zip"/>
+                <CheckBox Content="Mostrar archivo al acabar" Name="cbxExploradorWindows" ToolTip="Al estar marcada esta opción el extractor iniciará el explorador de Windows donde está la ruta de salida."/>
+            </StackPanel>
+        </GroupBox>
+        <Grid Canvas.Left="23" Canvas.Top="115" ToolTip="Ruta a la carpeta en la que se guardaran el resultado de la extracción. Si no existe será creada automáticamente.">
+            <TextBox  Width="250"  VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="tbxRutaFinal" Margin="5"/>
+            <TextBlock IsHitTestVisible="False" Text="Ruta a la carpeta de extracción" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbxRutaFinal}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+        <Grid Canvas.Left="23" Canvas.Top="54" ToolTip="Ruta a la carpeta de tus ejercicios, dentro de esta estarán todos las demás carpetas." >
+            <TextBox  Width="250"  VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="tbxRutaInicio" Margin="5" TextChanged="TbxRutaInicio_TextChanged"/>
+            <TextBlock IsHitTestVisible="False" Text="Ruta a la carpeta de ejercicios" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbxRutaInicio}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+        <Button Content="1" Canvas.Left="288" Canvas.Top="117" Width="30" FontFamily="Wingdings" Height="25" FontSize="18" FontWeight="Bold" Click="btnRutaFinalClick" Name="btnRutaFinal" ToolTip="Abre el buscador de Windows para buscar una carpeta"/>
+        <Expander Header="" Height="247" Canvas.Left="330" Canvas.Top="21" Width="300" ExpandDirection="Right" Collapsed="ExpanderCollapsed" Expanded="ExpanderExpanded" Name="exprArbol" Visibility="Hidden">
+            <Grid>
+                <TreeView Background="LightGray" Name="trvVisorCarpetas"></TreeView>
+            </Grid>
+        </Expander>
+    </Canvas>
+</Window>
