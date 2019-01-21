@@ -7,7 +7,6 @@ namespace CodeExtractor
 {
     static class Copy
     {
-
         /// <summary>
         /// Copy expecific files filtering by extension
         /// </summary>
@@ -21,6 +20,9 @@ namespace CodeExtractor
         public static void ExpecificFiles(string sourcePath, string destPath, bool cs, bool exe, bool dll, bool compress, bool deleteAfterCompress, bool showCreatedFileInExplorer)
         {
             if (sourcePath == "" || !Directory.Exists(sourcePath))
+                return;
+
+            if (destPath == "")
                 return;
 
             string[] directorys = Directory.GetDirectories(sourcePath);
@@ -37,7 +39,9 @@ namespace CodeExtractor
                     File.Copy(filesToCopy[j], FileEndPatch(directorys[i], destPath, Path.GetFileName(filesToCopy[j])), true);
             }
             if(compress)
-                Compress(destPath, Path.GetFileName(destPath), deleteAfterCompress);
+                Compress(destPath, Path.GetFileName(destPath));
+            if (deleteAfterCompress)
+                DeleteEntireFolder(destPath);
             if (showCreatedFileInExplorer)
                 OpenPatchWindowsExplorer(destPath);
         }
@@ -47,16 +51,13 @@ namespace CodeExtractor
         /// </summary>
         /// <param name="path">Patch to make the zip</param>
         /// <param name="fileName">Zip name</param>
-        /// <param name="deleteDirectoryAfterZip">Determines if the compressed directory should be deleted after zip</param>
-        private static void Compress (string path, string fileName, bool deleteDirectoryAfterZip)
+        private static void Compress (string path, string fileName)
         {
-            string rutaDirectorioPadre = new DirectoryInfo(path).Parent.FullName + Path.DirectorySeparatorChar;
-            if (File.Exists(rutaDirectorioPadre + fileName + ".zip"))
-                File.Delete(rutaDirectorioPadre + fileName + ".zip");
+            string rootPathDyrectory = new DirectoryInfo(path).Parent.FullName + Path.DirectorySeparatorChar + fileName + ".zip";
+            if (File.Exists(rootPathDyrectory))
+                File.Delete(rootPathDyrectory);
 
-            ZipFile.CreateFromDirectory(path, rutaDirectorioPadre + fileName + ".zip",CompressionLevel.Optimal,false);
-            if (deleteDirectoryAfterZip)
-                DeleteEntireFolder(path);
+            ZipFile.CreateFromDirectory(path, rootPathDyrectory,CompressionLevel.Optimal,false);
         }
 
         /// <summary>
@@ -65,8 +66,7 @@ namespace CodeExtractor
         /// <param name="path">the patch to the file</param>
         private static void OpenPatchWindowsExplorer(string path)
         {
-            string rutaDirectorioPadre = new DirectoryInfo(path).Parent.FullName + Path.DirectorySeparatorChar;
-            Process.Start(rutaDirectorioPadre);
+            Process.Start(new DirectoryInfo(path).Parent.FullName + Path.DirectorySeparatorChar);
         }
 
         /// <summary>

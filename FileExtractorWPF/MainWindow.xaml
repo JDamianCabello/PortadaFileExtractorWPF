@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:FileExtractorWPF"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="FileExtractorWPF.MainWindow"
         mc:Ignorable="d"
-        Title="Extractor de Ficheros para Portada Alta" Height="360.699" Width="372.826" ResizeMode="CanMinimize" Name="ventanaPrincipal">
+        Title="Extractor de Ficheros para Portada Alta" Height="361" Width="373" ResizeMode="CanMinimize" Name="ventanaPrincipal">
     <Canvas>
         <Label Content="Ruta a carpeta de ejercicios:" Canvas.Left="23" Canvas.Top="30" FontWeight="Bold"/>
         <Label Content="Ruta de salida:" Canvas.Left="23" Canvas.Top="85" FontWeight="Bold"/>
         <Button Content="Iniciar extractor" Canvas.Left="235" Canvas.Top="205" Width="95" Height="32" Name="btnIniciar" Click="BtnIniciar_Click" ToolTip="Inicia el extractor con las condiciones establecidas en opciones de extracción. Si no se marca ni .exe, .dll o .cs solo creará las carpetas (vacias)."/>
         <Button Content="1" Canvas.Left="288" Canvas.Top="56" Width="30" FontFamily="Wingdings" Height="25" FontSize="18" FontWeight="Bold" Name="btnRutaInicio" Click="btnRutaInicialClick" ToolTip="Abre el buscador de Windows para buscar una carpeta"/>
         <Menu Width="685">
-            <MenuItem Header="Acerca de" />
+            <MenuItem Header="Acerca de" Click="MenuItem_Click" />
         </Menu>
         <GroupBox Canvas.Left="23" Canvas.Top="158" Height="147" Width="188">
             <GroupBox.Header>
@@ -67,5 +67,6 @@
                 <TreeView Background="LightGray" Name="trvVisorCarpetas"></TreeView>
             </Grid>
         </Expander>
+        <ProgressBar x:Name="ProgressBar1" Minimum="0" Maximum="100" Value="0" Height="18" Canvas.Left="56" Canvas.Top="305" Width="250"/>
     </Canvas>
 </Window>

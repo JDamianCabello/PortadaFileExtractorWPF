@@ -30,24 +30,24 @@ namespace FileExtractorWPF
             {
                 tbxRutaInicio.Text = fsd.FileName;
                 if(exprArbol.IsExpanded)
-                    ListarDirectorios(trvVisorCarpetas, fsd.FileName);              
+                    ListarDirectorios();              
             }
             btnRutaFinal.IsEnabled = true;
             this.IsEnabled = true;
         }
 
         
-        private void ListarDirectorios(System.Windows.Controls.TreeView treeView, string path)
+        private void ListarDirectorios()
         {
-            treeView.Items.Clear();
-            var rootDirectoryInfo = new DirectoryInfo(path);
+            trvVisorCarpetas.Items.Clear();
+            var rootDirectoryInfo = new DirectoryInfo(tbxRutaInicio.Text);
             try
             {
-                treeView.Items.Add(CrearDirectoriosyNodos(rootDirectoryInfo));
+                trvVisorCarpetas.Items.Add(CrearDirectoriosyNodos(rootDirectoryInfo));
             }
             catch
             {
-                treeView.Items.Add(new TreeViewItem { Header = "ERROR de permisos, no se carga nada aún así busca" });
+                trvVisorCarpetas.Items.Add(new TreeViewItem { Header = "ERROR de permisos, no se carga nada aún así busca" });
             }
             exprArbol.IsExpanded = true;
         }
@@ -72,7 +72,7 @@ namespace FileExtractorWPF
             exprArbol.IsExpanded = true;
             exprArbol.Visibility = Visibility.Visible;
             if (Directory.Exists(tbxRutaInicio.Text))
-                ListarDirectorios(trvVisorCarpetas, tbxRutaInicio.Text);
+                ListarDirectorios();
         }
 
         private void CbxExpand_Unchecked(object sender, RoutedEventArgs e)
@@ -89,7 +89,7 @@ namespace FileExtractorWPF
         private void btnRutaFinalClick(object sender, RoutedEventArgs e)
         {
             var fsd = new FolderSelectDialog();
-            fsd.Title = "Selecciona la carpeta para extarer los ficheros";
+            fsd.Title = "Selecciona la carpeta para extraer los ficheros";
             fsd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             btnRutaInicio.IsEnabled = false;
             this.IsEnabled = false;
@@ -103,19 +103,19 @@ namespace FileExtractorWPF
 
         private void ExpanderCollapsed(object sender, RoutedEventArgs e)
         {
-            ventanaPrincipal.Width = 372.826;
+            ventanaPrincipal.Width = 373;
         }
 
         private void ExpanderExpanded(object sender, RoutedEventArgs e)
         {
-            ventanaPrincipal.Width = 691.161;
+            ventanaPrincipal.Width = 690;
         }
 
         private void TbxRutaInicio_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (Directory.Exists(tbxRutaInicio.Text))
                 if (exprArbol.IsExpanded)
-                    ListarDirectorios(trvVisorCarpetas, tbxRutaInicio.Text);
+                    ListarDirectorios();
                 else if (tbxRutaInicio.Text == "" || Directory.Exists(tbxRutaInicio.Text))
                 {
                     trvVisorCarpetas.Items.Clear();
@@ -132,6 +132,12 @@ namespace FileExtractorWPF
         {
             cbxBorrar.IsEnabled = cbxComprimir.IsChecked.Value;
             cbxBorrar.IsChecked = cbxComprimir.IsChecked.Value;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            AcercaDe acercaDe = new AcercaDe();
+            acercaDe.Show();
         }
     }
 }
